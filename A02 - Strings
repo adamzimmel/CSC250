@@ -1,0 +1,149 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h> 
+#define SIZE 100
+
+// Prints out which string to pick
+void printStringSelect() {
+  char *select = "Select a string!\n"
+               "1. str1\n"
+               "2. str2\n"
+               "3. str3\n"
+	             "4. str4\n"
+	             "0. Exit\n";
+  printf("%s", select);
+}
+
+// Prints out which operation to pick
+void printOperations() {
+  char *menu = "1. Replace\n"
+	             "2. Find character\n"
+	             "3. Print lowercase\n"
+	             "4. Print uppercase\n"
+	             "5. Print length\n"
+	             "6. Print string\n"
+	             "0. Exit\n";
+  printf("%s", menu);
+}
+int i; 
+int getLen(char input[]) {
+int i; 
+for(i=0; input[i]!='\0'; ++i);
+
+return i;
+ 
+ // size_t length = sizeof(input) / sizeof(input[0]);
+ // return length;
+}
+
+void replaceChar(char input[], char target, char replace) {
+	int size = getLen(input);
+  for (int i = 0; i < size; i++) {
+    if (input[i] == target) {
+      input[i] = replace;
+    }
+  }
+}
+
+int findChar(char input[], char target) { 
+  int size = getLen(input);
+  for (int i = 0; i < size; i++) {
+    if (input[i] == target) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+void printString(char input[]) {
+  puts(input);
+}
+
+void printAsLower(char input[]) {
+	int size = getLen(input);
+  char modified[SIZE];
+  for (int i=0; i < size; i++) {
+    modified[i] = tolower(input[i]);
+  }
+  printString(modified);
+}
+
+void printAsUpper(char input[]) {
+  int size = getLen(input);
+  char modified[SIZE];
+  for (int i=0; i < size; i++) {
+    modified[i] = toupper(input[i]);
+  }
+  printString(modified);
+}
+
+
+int main(){
+  char target, replace;
+	char str1[SIZE] = "";
+	char str2[SIZE] = "";
+	char str3[SIZE] = "";
+	char str4[SIZE] = "";
+
+  char *strings[] = {str1, str2, str3, str4};
+	int arraySelect, menuResponse, result;
+	
+  printf("Enter your four strings, separated by newlines.\n");
+  
+  fgets(str1, sizeof(str1), stdin);
+  fgets(str2, sizeof(str2), stdin);
+  fgets(str3, sizeof(str3), stdin);
+  fgets(str4, sizeof(str4), stdin);
+	
+  str1[strcspn(str1, "\n")] = 0;
+  str2[strcspn(str2, "\n")] = 0;
+  str3[strcspn(str3, "\n")] = 0;
+  str4[strcspn(str4, "\n")] = 0;
+  
+	do {
+		printStringSelect();
+		scanf("%d", &arraySelect);
+    
+		if(arraySelect < 1 || arraySelect > 4) return 0;
+		printOperations();
+		scanf("%d", &menuResponse);
+
+    arraySelect -= 1;
+		if(menuResponse < 1 || menuResponse > 6) return 0;
+    switch (menuResponse) {
+      case 1:
+        puts("Enter a character to replace");
+        while((target = getchar()) == '\n');
+        puts("Enter a character to replace the first character");
+        while((replace = getchar()) == '\n');
+        replaceChar(strings[arraySelect], target, replace);
+        puts(strings[arraySelect]);
+        break;
+      case 2:
+        puts("Enter a character to find");
+        while((target = getchar()) == '\n');
+        if(findChar(strings[arraySelect], target)) {
+          puts("Character is in string");
+        }
+        else {
+          puts("Character is not in string");
+        }
+        break;
+      case 3:
+        printAsLower(strings[arraySelect]);
+        break;
+      case 4:
+        printAsUpper(strings[arraySelect]);
+        break;
+      case 5:
+        result = getLen(strings[arraySelect]);
+        printf("%d\n", result);
+        break;
+      case 6:
+        printString(strings[arraySelect]);
+        break;
+    }
+	} while(1);
+	return 0; 
+}
